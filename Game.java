@@ -1,5 +1,4 @@
 public class Game {
-    static int highestCard = 10;
     static int numPlayers = 3;
     static int losingScore = (60 / numPlayers) + 1;
     static Player[] players = new Player[numPlayers];
@@ -7,10 +6,14 @@ public class Game {
     boolean playGame = true;
 
     public static void main(String[] args) {
-
-        while (playGame) {
-            round();
-        }
+        Deck deck = new Deck(10);
+        deck.getDeck();
+        System.out.println(deck.getTotCards());
+        //deck.shuffle();
+        deck.getDeck();
+        //while (playGame) {
+        //    round();
+        //}
 
         
 
@@ -31,7 +34,7 @@ public class Game {
     }
 
     private static void turn(int playerNum){
-        int cardDrawn = (int) (Math.random() * highestCard) + 1;
+        int cardDrawn = (int) (Math.random() * Deck.getHighestCard()) + 1;
         //make new hand array below
 
 
