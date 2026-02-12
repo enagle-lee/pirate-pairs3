@@ -7,9 +7,7 @@ public class Player {
     private boolean inGame = true;
 
 
-    // public void strategy(){
-
-    // }
+    // Action Methods
 
     public int[] takeCard(int cardDrawn){
         int[] newHand = new int[hand.length + 1];
@@ -21,12 +19,32 @@ public class Player {
         return hand;
     }
 
+    public int[] fold(Game game){
+        game.deck.discard(hand); //add hand to discard pile
+        hand = new int [0];
+        int penaltyCard = game.getLowestCardInAllHands();
+        points += penaltyCard;
+        return hand;
+    }
+
+    // Strategy Methods
+    // public void strategy(){
+
+    // }
+
+    // Accessor Methods
+
+
     public int getPoints(){
         return points;
     }
 
-    public String getHand(){
+    public String displayHand(){
         return Arrays.toString(hand);
+    }
+
+    public int[] getHand(){
+        return hand;
     }
 
     public void setStatus(boolean inGame) {

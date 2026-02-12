@@ -12,20 +12,20 @@ public class Game {
             game.players[i] = new Player();
         }
         game.deck = new Deck(10);
-        System.out.println(game.deck.getDeck());
+        System.out.println(game.deck.displayDeck());
         System.out.println(game.deck.getTotCards());
         game.deck.shuffle();
-        System.out.println(game.deck.getDeck());
+        System.out.println(game.deck.displayDeck());
         game.round1();
-        System.out.println(game.deck.getDeck());
+        System.out.println(game.deck.displayDeck());
         System.out.println(game.deck.getTotCards());
         for (int i = 0; i < game.numPlayers; i++) {
-            System.out.println(game.players[i].getHand());
+            System.out.println("Player " + i + ":" + game.players[i].displayHand());
         }
     }
 
     private void round1(){
-        for (Player player: players) {
+        for (Player player : players) {
             player.takeCard(deck.drawCard());
         }
     }
@@ -40,6 +40,19 @@ public class Game {
 
         //make new player array.  or more efficient to just check boolean?
 
+    }
+
+    public int getLowestCardInAllHands(){
+        int lowest = Integer.MAX_VALUE;
+        for(Player player : players){
+            int[] hand = player.getHand();
+            for (int card : hand) {
+                if (card < lowest) {
+                    lowest = card;
+                }
+            }
+        }
+        return lowest;
     }
 
     // private void turn(int playerNum){

@@ -4,6 +4,7 @@ public class Deck {
     private int highestCard;
     private int totCards = 0;
     private int[] deck;
+    private int [] discardPile = new int[0];
 
     public Deck(int highestCard) {
         this.highestCard = highestCard;
@@ -20,21 +21,6 @@ public class Deck {
             }
         }
     }
-
-    // getters
-
-    public int getHighestCard() {
-        return highestCard;
-    }
-
-    public int getTotCards() {
-        return totCards;
-    }
-
-    public String getDeck() {
-        return Arrays.toString(deck);
-    }
-
 
 // array for discarded cards
 
@@ -64,6 +50,35 @@ public class Deck {
         return drawn;
     }
 
+    public int[] discard(int[] hand){
+        int[] newDiscardPile = new int[discardPile.length + hand.length];
+        for (int i = 0; i < discardPile.length; i++){
+            newDiscardPile[i] = discardPile[i];
+        }
+        int tracker = 0;
+        for (int i = discardPile.length; i < newDiscardPile.length; i++){
+            newDiscardPile[i] = hand[tracker];
+            tracker++;
+        }
+        discardPile = newDiscardPile; //reassign
+        return discardPile;
+    }
+
+
+
+    // getters
+
+    public int getHighestCard() {
+        return highestCard;
+    }
+
+    public int getTotCards() {
+        return totCards;
+    }
+
+    public String displayDeck() {
+        return Arrays.toString(deck);
+    }
 
 }
 
