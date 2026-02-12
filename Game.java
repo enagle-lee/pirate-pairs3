@@ -12,28 +12,16 @@ public class Game {
             game.players[i] = new Player();
         }
         game.deck = new Deck(10);
-        game.deck.getDeck();
+        System.out.println(game.deck.getDeck());
         System.out.println(game.deck.getTotCards());
         game.deck.shuffle();
-        game.deck.getDeck();
+        System.out.println(game.deck.getDeck());
         game.round1();
-        game.deck.getDeck();
+        System.out.println(game.deck.getDeck());
         System.out.println(game.deck.getTotCards());
         for (int i = 0; i < game.numPlayers; i++) {
             System.out.println(game.players[i].getHand());
         }
-        
-        //while (playGame) {
-        //    round();
-        //}
-
-        
-
-
-
-       
-
-        
     }
 
     private void round1(){

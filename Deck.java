@@ -31,8 +31,8 @@ public class Deck {
         return totCards;
     }
 
-    public void getDeck() {
-        System.out.print(Arrays.toString(deck));
+    public String getDeck() {
+        return Arrays.toString(deck);
     }
 
 
@@ -56,14 +56,11 @@ public class Deck {
     // give player a take card function that takes this method as an input
     public int drawCard(){
         int drawn = deck[deck.length - 1];   // take top card
-
         int[] newDeck = new int[deck.length - 1];
-        for (int i = 0; i < newDeck.length - 1; i++){
+        for (int i = 0; i < newDeck.length; i++){
             newDeck[i] = deck [i];
         }
-
         deck = newDeck; // reassign reference
-
         return drawn;
     }
 

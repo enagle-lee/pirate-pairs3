@@ -13,11 +13,11 @@ public class Player {
 
     public int[] takeCard(int cardDrawn){
         int[] newHand = new int[hand.length + 1];
-        for (int i = 0; i < hand.length - 1; i ++){
+        for (int i = 0; i < hand.length; i ++){
             newHand[i] = hand[i];
         }
         newHand[newHand.length - 1] = cardDrawn;
-
+        hand = newHand; // reassign reference
         return hand;
     }
 
@@ -26,7 +26,7 @@ public class Player {
     }
 
     public String getHand(){
-        Arrays.toString(hand);
+        return Arrays.toString(hand);
     }
 
     public void setStatus(boolean inGame) {
