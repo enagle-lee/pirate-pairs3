@@ -1,16 +1,28 @@
 public class Game {
-    static int numPlayers = 3;
-    static int losingScore = (60 / numPlayers) + 1;
-    static Player[] players = new Player[numPlayers];
+    int numPlayers = 3;
+    int losingScore = (60 / numPlayers) + 1;
+    Player[] players = new Player[numPlayers];
+    Deck deck;
 
     boolean playGame = true;
 
     public static void main(String[] args) {
-        Deck deck = new Deck(10);
-        deck.getDeck();
-        System.out.println(deck.getTotCards());
-        //deck.shuffle();
-        deck.getDeck();
+        Game game = new Game();
+        for (int i = 0; i < game.numPlayers ; i++){
+            game.players[i] = new Player();
+        }
+        game.deck = new Deck(10);
+        game.deck.getDeck();
+        System.out.println(game.deck.getTotCards());
+        game.deck.shuffle();
+        game.deck.getDeck();
+        game.round1();
+        game.deck.getDeck();
+        System.out.println(game.deck.getTotCards());
+        for (int i = 0; i < game.numPlayers; i++) {
+            System.out.println(game.players[i].getHand());
+        }
+        
         //while (playGame) {
         //    round();
         //}
@@ -24,23 +36,32 @@ public class Game {
         
     }
 
-    private static void round() {
+    private void round1(){
+        for (Player player: players) {
+            player.takeCard(deck.drawCard());
+        }
+    }
+
+    private void round() {
         for (int i = 0; i < players.length; i++){
-            turn(i);
+            
+            // call strategy method --> strategy method will either call draw method or pass method
+
+            //turn(i);
         }
 
         //make new player array.  or more efficient to just check boolean?
 
     }
 
-    private static void turn(int playerNum){
-        int cardDrawn = (int) (Math.random() * Deck.getHighestCard()) + 1;
-        //make new hand array below
+    // private void turn(int playerNum){
+        
+    //     //make new hand array below
 
 
-        if (players[playerNum].getScore() > losingScore) { 
-            players[playerNum].setStatus(false);
-        }
+    //     if (players[playerNum].getScore() > losingScore) { 
+    //         players[playerNum].setStatus(false);
+    //     }
 
-    }
+    // }
 }

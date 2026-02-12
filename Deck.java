@@ -1,11 +1,11 @@
 import java.util.Arrays;
 
 public class Deck {
-    private static int highestCard;
-    private static int totCards = 0;
-    private static int[] deck;
+    private int highestCard;
+    private int totCards = 0;
+    private int[] deck;
 
-    public Deck(int highestCard){
+    public Deck(int highestCard) {
         this.highestCard = highestCard;
         for (int i = 1; i <= highestCard; i++) {
             totCards += i;
@@ -13,41 +13,65 @@ public class Deck {
         // make an array for cards yet to be drawn
         deck = new int[totCards];
         int tempLoc = 0;
-        for (int i = 1; i <= highestCard; i++){
-            for (int j = 0; j < i; j++){
-            deck[tempLoc] = i;
-            tempLoc ++;
+        for (int i = 1; i <= highestCard; i++) {
+            for (int j = 0; j < i; j++) {
+                deck[tempLoc] = i;
+                tempLoc++;
             }
         }
     }
 
     // getters
 
-    public static int getHighestCard(){
+    public int getHighestCard() {
         return highestCard;
     }
-    public static int getTotCards(){
+
+    public int getTotCards() {
         return totCards;
     }
-    public void getDeck(){
+
+    public void getDeck() {
         System.out.print(Arrays.toString(deck));
-        }
     }
 
-    // array for discarded cards
 
-    // remove card function
+// array for discarded cards
 
-    // shuffle function
-    public void shuffle(){
-        int a = (int) (Math.random() * totCards) + 1;
-        int b = (int) (Math.random() * totCards) + 1;
-        if (a != b) {
+// remove card function
+
+// shuffle function
+    public void shuffle() {
+        for (int i = 0; i < totCards; i ++) {
+            int a = (int) (Math.random() * totCards);
+            int b = (int) (Math.random() * totCards);
+            if (a != b) {
             int tempValue = deck[a];
-            deck[a] = deck [b];
+            deck[a] = deck[b];
             deck[b] = tempValue;
+            }
         }
     }
 
+    // give player a take card function that takes this method as an input
+    public int drawCard(){
+        int drawn = deck[deck.length - 1];   // take top card
+
+        int[] newDeck = new int[deck.length - 1];
+        for (int i = 0; i < newDeck.length - 1; i++){
+            newDeck[i] = deck [i];
+        }
+
+        deck = newDeck; // reassign reference
+
+        return drawn;
+    }
 
 
+}
+
+// player as input??
+// public int drawCard(){
+
+// return deck[deck.length - 1];
+// }
