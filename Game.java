@@ -22,6 +22,12 @@ public class Game {
         for (int i = 0; i < game.numPlayers; i++) {
             System.out.println("Player " + i + ":" + game.players[i].displayHand());
         }
+        //testing out fold and discard code
+        game.players[0].fold(game);
+        System.out.println("Discard Pile: " + game.deck.displayDiscardPile());
+        System.out.println("Player 0" + ":" + game.players[0].displayHand());
+
+
     }
 
     private void round1(){

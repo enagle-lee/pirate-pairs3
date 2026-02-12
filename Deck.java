@@ -80,6 +80,10 @@ public class Deck {
         return Arrays.toString(deck);
     }
 
+    public String displayDiscardPile() {
+        return Arrays.toString(discardPile);
+    }
+
 }
 
 // player as input??
