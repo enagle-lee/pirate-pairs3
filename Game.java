@@ -22,30 +22,77 @@ public class Game {
         for (int i = 0; i < game.numPlayers; i++) {
             System.out.println("Player " + i + ":" + game.players[i].displayHand());
         }
-        //testing out fold and discard code
-        game.players[0].fold(game);
-        System.out.println("Discard Pile: " + game.deck.displayDiscardPile());
-        System.out.println("Player 0" + ":" + game.players[0].displayHand());
 
+
+        game.round();
+        System.out.println(game.deck.displayDeck());
+        System.out.println(game.deck.getTotCards());
+        for (int i = 0; i < game.numPlayers; i++) {
+            System.out.println("Player " + i + ":" + game.players[i].displayHand());
+        }
+
+        game.round();
+        System.out.println(game.deck.displayDeck());
+        System.out.println(game.deck.getTotCards());
+        for (int i = 0; i < game.numPlayers; i++) {
+            System.out.println("Player " + i + ":" + game.players[i].displayHand());
+        }
+
+        game.round();
+        System.out.println("Discard Pile: " + game.deck.displayDiscardPile());
+
+        System.out.println(game.deck.displayDeck());
+        System.out.println(game.deck.getTotCards());
+        for (int i = 0; i < game.numPlayers; i++) {
+            System.out.println("Player " + i + ":" + game.players[i].displayHand());
+        }
+        System.out.println("Discard Pile: " + game.deck.displayDiscardPile());
 
     }
 
     private void round1(){
         for (Player player : players) {
-            player.takeCard(deck.drawCard());
+            drawAction(player);
         }
     }
 
     private void round() {
         for (int i = 0; i < players.length; i++){
-            
-            // call strategy method --> strategy method will either call draw method or pass method
-
-            //turn(i);
+            if (players[i].getStatus()){
+                turn(i);
+            }            
         }
 
-        //make new player array.  or more efficient to just check boolean?
+        //make new player array.  or more efficient to just check boolean? NEEDS TO KNOW IF PLAYERIS EVEN PLAYING
 
+    }
+
+    // turn method.  calls the boolean returning strat functions in player.  checks for doubles after.  if points are added, check if its a valid score
+
+    private void turn(int i){
+        if (players[i].willDraw()){
+            drawAction(players[i]);
+            if(players[i].hasDouble() > 0){
+                foldAction(players[i], players[i].hasDouble());
+            }
+        }else{ // eats points
+            foldAction(players[i], getLowestCardInAllHands());
+        }
+        if (players[i].getPoints() > losingScore) { 
+            players[i].setStatus(false);
+        }
+    }
+
+    //Potential Player Actions
+
+    public void drawAction(Player player){
+        player.takeCard(deck.drawCard());
+    }
+
+    //add folded hand to discard pile
+    public void foldAction(Player player, int penaltyCard){
+        deck.discard(player.getHand()); //returns updated discard pile
+        player.foldResult(penaltyCard); //updates player's points and hand
     }
 
     public int getLowestCardInAllHands(){

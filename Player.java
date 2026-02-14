@@ -19,18 +19,42 @@ public class Player {
         return hand;
     }
 
-    public int[] fold(Game game){
-        game.deck.discard(hand); //add hand to discard pile
-        hand = new int [0];
-        int penaltyCard = game.getLowestCardInAllHands();
+    public int[] foldResult(int penaltyCard){
+        //game.deck.discard(hand); //add hand to discard pile
         points += penaltyCard;
+        hand = new int [0];
         return hand;
     }
 
-    // Strategy Methods
-    // public void strategy(){
 
-    // }
+
+    public int hasDouble(){ //if false returns -1.  otherwise should add to points.  In game class have it call the fold method.
+        for (int i = 0; i < hand.length - 1; i++) {
+            for (int j = i + 1; j < hand.length; j++){
+                if (hand[i] == hand[j]){
+                    return hand[i];
+                }
+            }
+        }
+        return -1;
+    }
+       
+    // Strategy Methods
+
+    // Return a boolean>.  game then does something with the boolean 
+    public boolean willDraw(){
+        if (hand.length == 0) {
+            return true;
+        }
+        else if(hand.length > 3){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    // 
 
     // Accessor Methods
 
@@ -45,6 +69,10 @@ public class Player {
 
     public int[] getHand(){
         return hand;
+    }
+
+    public boolean getStatus(){
+        return inGame;
     }
 
     public void setStatus(boolean inGame) {

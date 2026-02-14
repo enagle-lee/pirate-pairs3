@@ -2,17 +2,17 @@ import java.util.Arrays;
 
 public class Deck {
     private int highestCard;
-    private int totCards = 0;
+    private int tempTotCards = 0;
     private int[] deck;
     private int [] discardPile = new int[0];
 
     public Deck(int highestCard) {
         this.highestCard = highestCard;
         for (int i = 1; i <= highestCard; i++) {
-            totCards += i;
+            tempTotCards += i;
         }
         // make an array for cards yet to be drawn
-        deck = new int[totCards];
+        deck = new int[tempTotCards];
         int tempLoc = 0;
         for (int i = 1; i <= highestCard; i++) {
             for (int j = 0; j < i; j++) {
@@ -28,9 +28,9 @@ public class Deck {
 
 // shuffle function
     public void shuffle() {
-        for (int i = 0; i < totCards; i ++) {
-            int a = (int) (Math.random() * totCards);
-            int b = (int) (Math.random() * totCards);
+        for (int i = 0; i < deck.length; i ++) {
+            int a = (int) (Math.random() * deck.length);
+            int b = (int) (Math.random() * deck.length);
             if (a != b) {
             int tempValue = deck[a];
             deck[a] = deck[b];
@@ -40,6 +40,7 @@ public class Deck {
     }
 
     // give player a take card function that takes this method as an input
+    // removes card from the array and returns the int
     public int drawCard(){
         int drawn = deck[deck.length - 1];   // take top card
         int[] newDeck = new int[deck.length - 1];
@@ -73,7 +74,7 @@ public class Deck {
     }
 
     public int getTotCards() {
-        return totCards;
+        return deck.length;
     }
 
     public String displayDeck() {
