@@ -2,6 +2,7 @@ public class Game {
     int numPlayers = 3;
     int losingScore = (60 / numPlayers) + 1;
     Player[] players = new Player[numPlayers];
+    int numPlayersOut = 0;
     Deck deck;
 
     boolean playGame = true;
@@ -23,30 +24,16 @@ public class Game {
             System.out.println("Player " + i + ":" + game.players[i].displayHand());
         }
 
-
-        game.round();
-        System.out.println(game.deck.displayDeck());
-        System.out.println(game.deck.getTotCards());
-        for (int i = 0; i < game.numPlayers; i++) {
-            System.out.println("Player " + i + ":" + game.players[i].displayHand());
+        while(game.playGame){
+            game.round();
+            System.out.println(game.deck.displayDeck());
+            System.out.println(game.deck.getTotCards());
+            for (int i = 0; i < game.numPlayers; i++) {
+                System.out.println("Player " + i + ":" + game.players[i].displayHand() + ". Points: " + game.players[i].getPoints());
+            }
+            System.out.println("Discard Pile: " + game.deck.displayDiscardPile());
         }
 
-        game.round();
-        System.out.println(game.deck.displayDeck());
-        System.out.println(game.deck.getTotCards());
-        for (int i = 0; i < game.numPlayers; i++) {
-            System.out.println("Player " + i + ":" + game.players[i].displayHand());
-        }
-
-        game.round();
-        System.out.println("Discard Pile: " + game.deck.displayDiscardPile());
-
-        System.out.println(game.deck.displayDeck());
-        System.out.println(game.deck.getTotCards());
-        for (int i = 0; i < game.numPlayers; i++) {
-            System.out.println("Player " + i + ":" + game.players[i].displayHand());
-        }
-        System.out.println("Discard Pile: " + game.deck.displayDiscardPile());
 
     }
 
@@ -58,13 +45,11 @@ public class Game {
 
     private void round() {
         for (int i = 0; i < players.length; i++){
+            if (!playGame) break;
             if (players[i].getStatus()){
                 turn(i);
-            }            
+            }                 
         }
-
-        //make new player array.  or more efficient to just check boolean? NEEDS TO KNOW IF PLAYERIS EVEN PLAYING
-
     }
 
     // turn method.  calls the boolean returning strat functions in player.  checks for doubles after.  if points are added, check if its a valid score
@@ -80,8 +65,14 @@ public class Game {
         }
         if (players[i].getPoints() > losingScore) { 
             players[i].setStatus(false);
+            numPlayersOut++;
+            //Check if game should end immediately
+            if (numPlayersOut == players.length - 1){
+                playGame = false;
+            }
         }
     }
+    
 
     //Potential Player Actions
 

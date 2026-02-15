@@ -22,11 +22,7 @@ public class Deck {
         }
     }
 
-// array for discarded cards
-
-// remove card function
-
-// shuffle function
+    // shuffle function
     public void shuffle() {
         for (int i = 0; i < deck.length; i ++) {
             int a = (int) (Math.random() * deck.length);
@@ -66,7 +62,6 @@ public class Deck {
     }
 
 
-
     // getters
 
     public int getHighestCard() {
@@ -84,11 +79,4 @@ public class Deck {
     public String displayDiscardPile() {
         return Arrays.toString(discardPile);
     }
-
 }
-
-// player as input??
-// public int drawCard(){
-
-// return deck[deck.length - 1];
-// }

@@ -54,8 +54,6 @@ public class Player {
         }
     }
 
-    // 
-
     // Accessor Methods
 
 
@@ -76,6 +74,6 @@ public class Player {
     }
 
     public void setStatus(boolean inGame) {
-        inGame = this.inGame;
+        this.inGame = inGame;
     }
 }
