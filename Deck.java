@@ -71,7 +71,6 @@ public class Deck {
         return discardPile;
     }
 
-
     // getters
 
     public int getHighestCard(){

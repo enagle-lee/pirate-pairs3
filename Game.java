@@ -1,7 +1,9 @@
+import java.util.Scanner;
+
 public class Game {
-    int numPlayers = 10;
-    int losingScore = (60 / numPlayers) + 1;
-    Player[] players = new Player[numPlayers];
+    int numPlayers;
+    int losingScore;
+    Player[] players;
     int numPlayersOut = 0;
     Deck deck;
     int typeDeck = 10;
@@ -10,30 +12,38 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
+        System.out.println("How many player are playing? ");
+        Scanner scanner = new Scanner(System.in);
+        game.numPlayers = scanner.nextInt();
+        scanner.close();
+
+        //now can calculate
+        game.losingScore = (60 / game.numPlayers) + 1;
+        game.players = new Player[game.numPlayers];
         for (int i = 0; i < game.numPlayers ; i++){
-            game.players[i] = new Player(game.numPlayers);
+            game.players[i] = new Player();
             System.out.println("Player " + i + " Strategy Type: " + game.players[i].getStratLevel());
         }
+
         game.deck = new Deck(game.typeDeck);
         System.out.println("Losing Score: " + game.losingScore);
         System.out.println("Original Deck: " + game.deck.displayDeck());
         System.out.println("Number of Cards in Deck: " + game.deck.getNumCardsInDeck());
         game.deck.shuffle();
         System.out.println("Shuffled Deck: " + game.deck.displayDeck());
+        
         System.out.println("Round 1 ------------------------------------ ");
         game.round1();
         for (int i = 0; i < game.numPlayers; i++) {
             System.out.println("Player " + i + ":" + game.players[i].displayHand());
         }
+        
         int counter = 2;
         while(game.playGame){
             System.out.println("Round " + counter + " ------------------------------------ ");
             System.out.println("Deck: " + game.deck.displayDeck());
             System.out.println("Number of Cards in Deck: " + game.deck.getNumCardsInDeck());
             game.round();
-            // for (int i = 0; i < game.numPlayers; i++) {
-            //     System.out.println("Player " + i + ":" + game.players[i].displayHand() + ". Points: " + game.players[i].getPoints());
-            // }
             System.out.println("Discard Pile: " + game.deck.displayDiscardPile() + game.deck.getNumCardsInDiscardPile());
             counter++;
         }
@@ -59,7 +69,7 @@ public class Game {
         }
     }
 
-    // turn method.  calls the boolean returning strat functions in player.  checks for doubles after.  if points are added, check if its a valid score
+    // turn method.  calls the strat functions for each player.  checks for pairs after.  if points are added, check if its a valid score
 
     private void turn(int i){
         int lowestCardInAllHands = getLowestCardInAllHands();

@@ -8,17 +8,16 @@ public class Player {
     private boolean inGame = true;
 
     // Constructor
-    public Player(int numPlayers){
-        int i = (int) (Math.random() * numPlayers);
-        if (i <= numPlayers / 3){
+    public Player(){
+        int i = (int) (Math.random() * 3) + 1;
+        if (i == 1){
             stratLevel = "simple";
-        } else if (i <= 2 * numPlayers / 3) {
+        } else if (i == 2) {
             stratLevel = "medium";
         } else {
             stratLevel = "complex";
         }
     }
-
 
     // Action Methods
 
@@ -71,8 +70,7 @@ public class Player {
        
     // Strategy Methods -- which to exectute in Game class is randomly assigned to each player in the constructor
 
-
-    // Return a boolean.  game then does something with the boolean 
+    // Changes the willDraw boolean.  game then does something with that boolean 
     public void stratSimple(int lowestCardInAllHands, int losingScore){
         if(points + lowestCardInAllHands >= losingScore) { // If folding would eliminate me, I should draw
             willDraw = true;
@@ -106,7 +104,7 @@ public class Player {
                     willDraw = true;
                 }
             } else if (hand.length == 2) {
-                // Both cards are the same and lowest in al hands, might as well draw
+                // Both cards are the same and lowest in all hands, might as well draw
                 if (myHighest == myLowest && myLowest == lowestCardInAllHands) {
                     willDraw = true;
                 } else if (myHighest >= 8 && myLowest >= 8) { // Both cards are high (risky hand)
@@ -228,6 +226,8 @@ public class Player {
     public boolean getStatus(){
         return inGame;
     }
+
+    //Setters
 
     public void setStratLevel(String stratLevel){
         this.stratLevel = stratLevel;
