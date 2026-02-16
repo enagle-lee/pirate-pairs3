@@ -35,6 +35,17 @@ public class Deck {
         }
     }
 
+    public void restockDeck(){
+        int[] newDeck = new int[discardPile.length];
+        for (int i = 0; i < newDeck.length; i++){
+            newDeck[i] = discardPile[i];
+        }
+        deck = newDeck; // reassign
+        shuffle();
+        discardPile = new int[0]; // clear discard pile
+
+    }
+
     // give player a take card function that takes this method as an input
     // removes card from the array and returns the int
     public int drawCard(){

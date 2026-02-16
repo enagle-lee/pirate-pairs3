@@ -3,8 +3,19 @@ import java.util.Arrays;
 public class Player {
     private int points = 0;
     private int[] hand = new int[0];
-
+    private boolean willDraw;
+    private String stratLevel;
     private boolean inGame = true;
+
+    // Constructor
+    public Player(){
+        int i = (int) (Math.random() * 2);
+        if (i == 0){
+            stratLevel = "simple";
+        } else {
+            stratLevel = "medium";
+        }
+    }
 
 
     // Action Methods
@@ -26,7 +37,24 @@ public class Player {
         return hand;
     }
 
-
+    public boolean removeCard(int cardValue){
+        //find card
+        for (int i = 0; i < hand.length; i++){
+            if (hand[i] == cardValue){
+                // create new hand without that card
+                int[] newHand = new int[hand.length - 1];
+                for (int j = 0; j < i; j++){
+                    newHand[j] = hand[j];
+                }
+                for (int j = i; j < newHand.length; j++){
+                    newHand[j] = hand[j + 1];
+                }
+                hand = newHand;
+                return true;  // Card found and removed
+            }
+        }
+        return false;
+    }
 
     public int hasDouble(){ //if false returns -1.  otherwise should add to points.  In game class have it call the fold method.
         for (int i = 0; i < hand.length - 1; i++) {
@@ -39,23 +67,92 @@ public class Player {
         return -1;
     }
        
-    // Strategy Methods
+    // Strategy Methods -- which to exectute in Game class is randomly assigned to each player in the constructor
 
-    // Return a boolean>.  game then does something with the boolean 
-    public boolean willDraw(){
+
+    // Return a boolean.  game then does something with the boolean 
+    public void stratSimple(int lowestCardInAllHands, int losingScore){
+        if(points + lowestCardInAllHands >= losingScore) { // If folding would eliminate me, I should draw
+            willDraw = true;
+        }else if (hand.length >3) {
+            willDraw = false;
+        } else {
+            willDraw = true;
+        }
+    }
+
+    public void stratMedium(int lowestCardInAllHands, int losingScore){        
+        // Must draw if no cards
         if (hand.length == 0) {
-            return true;
+            willDraw = true;
+        } else if(points + lowestCardInAllHands >= losingScore) { // If folding would eliminate me, I should draw 
+            willDraw = true;
+        } else {
+            int myLowest = getLowestCardInHand();
+            int myHighest = getHighestCardInHand();
+
+            if (hand.length == 1) {
+                // If I have the lowest card, nothing to lose by drawing
+                if (myLowest == lowestCardInAllHands) {
+                    willDraw = true;
+                }
+                // If my card is much worse than the lowest, fold and steal it
+                else if (myLowest - lowestCardInAllHands >= 5 && myLowest > 8) {
+                    willDraw = false;
+                }
+                else {
+                    willDraw = true;
+                }
+            } else if (hand.length == 2) {
+                // Both cards are the same and lowest in al hands, might as well draw
+                if (myHighest == myLowest && myLowest == lowestCardInAllHands) {
+                    willDraw = true;
+                } else if (myHighest >= 8 && myLowest >= 8) { // Both cards are high (risky hand)
+                    // If the lowest card is much better, fold and steal it
+                    if (lowestCardInAllHands <= 5) {
+                        willDraw = false;
+                    } else {
+                        willDraw = true;
+                    }
+                } else {
+                    willDraw = true;
+                }
+            } else { // hand size of 3 or more
+                if(lowestCardInAllHands >= 8){ //if the lowest card in play is a high card --> might as well draw
+                    willDraw = true;
+                }else{
+                    willDraw = false;
+                }
+            }
         }
-        else if(hand.length > 3){
-            return false;
-        }
-        else{
-            return true;
+    }
+
+    public void stratComplex(int lowestCardInAllHands, int losingScore, int totalCards, int[] discardPile){
+        // Must draw if no cards
+        if (hand.length == 0) {
+            willDraw = true;
+        } else if(points + lowestCardInAllHands >= losingScore) { // If folding would eliminate me, I should draw 
+            willDraw = true;
+        } else {
+            // Adjust threshold based on game state
+            double threshold;
+            
+            int pointsUntilLoss = losingScore - points;
+            
+            if (pointsUntilLoss <= 3) {
+                threshold = 0.15;  // Very conservative when close to losing
+            } else if (pointsUntilLoss <= 7) {
+                threshold = 0.25;  // Moderately conservative
+            } else {
+                threshold = 0.35;  // Normal risk tolerance
+            }
+            for (int card : hand) { //card vale == # of that card in existence
+
+            }
         }
     }
 
     // Accessor Methods
-
 
     public int getPoints(){
         return points;
@@ -69,8 +166,40 @@ public class Player {
         return hand;
     }
 
+    public int getLowestCardInHand(){
+        int lowest = hand[0];
+        for(int card : hand){
+            if (card < lowest) {
+                lowest = card;
+            }
+        }
+        return lowest;
+    }
+    public int getHighestCardInHand(){
+        int highest = hand[0];
+        for(int card : hand){
+            if (card > highest) {
+                highest = card;
+            }
+        }
+        return highest;
+    }
+
+    public String getStratLevel(){
+        return stratLevel;
+    }
+    
+
+    public boolean getWillDraw(){
+        return willDraw;
+    }
+
     public boolean getStatus(){
         return inGame;
+    }
+
+    public void setStratLevel(String stratLevel){
+        this.stratLevel = stratLevel;
     }
 
     public void setStatus(boolean inGame) {
