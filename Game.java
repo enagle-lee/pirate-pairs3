@@ -33,7 +33,7 @@ public class Game {
         System.out.println("Shuffled Deck: " + game.deck.displayDeck());
         
         System.out.println("Round 1 ------------------------------------ ");
-        game.round1();
+        game.round1(); //first round everyone draws
         for (int i = 0; i < game.numPlayers; i++) {
             System.out.println("Player " + i + ":" + game.players[i].displayHand());
         }
@@ -47,6 +47,7 @@ public class Game {
             System.out.println("Discard Pile: " + game.deck.displayDiscardPile() + game.deck.getNumCardsInDiscardPile());
             counter++;
         }
+        //Declare the winner
         for (int i = 0; i < game.players.length; i++) {
             if (game.players[i].getStatus()){
                 System.out.println("Player " + i + " is the winner!");
@@ -114,18 +115,18 @@ public class Game {
         }
     }
     
-
-    //Game Actions
+    //Potential Game Actions
 
     private void drawAction(Player player){
         player.takeCard(deck.drawCard());
     }
 
-    //add folded hand to discard pile
     private void foldAction(Player player, int penaltyCard){
         deck.discard(player.getHand()); //returns updated discard pile
         player.foldResult(penaltyCard); //updates player's points and hand
     }
+
+    //Useful Game Information
 
     private int getLowestCardInAllHands(){
         int lowest = Integer.MAX_VALUE;

@@ -8,6 +8,7 @@ public class Player {
     private boolean inGame = true;
 
     // Constructor
+
     public Player(){
         int i = (int) (Math.random() * 3) + 1;
         if (i == 1){
@@ -19,7 +20,7 @@ public class Player {
         }
     }
 
-    // Action Methods
+    // In-game Action Methods
 
     public int[] takeCard(int cardDrawn){
         int[] newHand = new int[hand.length + 1];
@@ -69,8 +70,8 @@ public class Player {
     }
        
     // Strategy Methods -- which to exectute in Game class is randomly assigned to each player in the constructor
+    // Changes the willDraw boolean.  Game class then executes a broad action based on that boolean 
 
-    // Changes the willDraw boolean.  game then does something with that boolean 
     public void stratSimple(int lowestCardInAllHands, int losingScore){
         if(points + lowestCardInAllHands >= losingScore) { // If folding would eliminate me, I should draw
             willDraw = true;
@@ -107,9 +108,8 @@ public class Player {
                 // Both cards are the same and lowest in all hands, might as well draw
                 if (myHighest == myLowest && myLowest == lowestCardInAllHands) {
                     willDraw = true;
-                } else if (myHighest >= 8 && myLowest >= 8) { // Both cards are high (risky hand)
-                    // If the lowest card is much better, fold and steal it
-                    if (lowestCardInAllHands <= 5) {
+                } else if (myHighest >= 8 && myLowest >= 8) {    // Both cards are high (risky hand)
+                    if (lowestCardInAllHands <= 5) {     // If the lowest card is much better, fold and steal it
                         willDraw = false;
                     } else {
                         willDraw = true;
@@ -118,7 +118,7 @@ public class Player {
                     willDraw = true;
                 }
             } else { // hand size of 3 or more
-                if(lowestCardInAllHands >= 8){ //if the lowest card in play is a high card --> might as well draw
+                if(lowestCardInAllHands >= 8){  //if the lowest card in play is a high card --> might as well draw
                     willDraw = true;
                 }else{
                     willDraw = false;
@@ -128,8 +128,7 @@ public class Player {
     }
 
     public void stratComplex(int lowestCardInAllHands, int losingScore, int totalCards, int[] discardPile, int[] otherHands){
-        // Must draw if no cards
-        if (hand.length == 0) {
+        if (hand.length == 0) { // Must draw if no cards
             willDraw = true;
         } else if(points + lowestCardInAllHands >= losingScore) { // If folding would eliminate me, I should draw 
             willDraw = true;
@@ -151,7 +150,7 @@ public class Player {
                     threshold = 0.2;  // standard risk tolerance
                 }
                 double totalRisk = 0;
-                for (int card : hand) { 
+                for (int card : hand) { //calculate and add the risk for each card in a player's hand
                     totalRisk += calcPairRisk(card, totalCards, discardPile, otherHands);
                 }
                 if (totalRisk > threshold){

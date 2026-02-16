@@ -22,7 +22,8 @@ public class Deck {
         }
     }
 
-    // shuffle function
+    // deck actions
+
     public void shuffle() {
         for (int i = 0; i < deck.length; i ++) {
             int a = (int) (Math.random() * deck.length);
@@ -46,8 +47,9 @@ public class Deck {
         System.out.println("Deck restocked!");
     }
 
-    // removes card from the array and returns the int
-    public int drawCard(){
+    //deck and discard pile "reacts" to player actions
+
+    public int drawCard(){  // removes card from the array and returns the int
         int drawn = deck[deck.length - 1];   // take top card
         int[] newDeck = new int[deck.length - 1];
         for (int i = 0; i < newDeck.length; i++){
@@ -57,7 +59,7 @@ public class Deck {
         return drawn;
     }
 
-    public int[] discard(int[] hand){
+    public int[] discard(int[] hand){ //adds a hand to discard pile
         int[] newDiscardPile = new int[discardPile.length + hand.length];
         for (int i = 0; i < discardPile.length; i++){
             newDiscardPile[i] = discardPile[i];
