@@ -8,12 +8,14 @@ public class Player {
     private boolean inGame = true;
 
     // Constructor
-    public Player(){
-        int i = (int) (Math.random() * 2);
-        if (i == 0){
+    public Player(int numPlayers){
+        int i = (int) (Math.random() * numPlayers);
+        if (i <= numPlayers / 3){
             stratLevel = "simple";
-        } else {
+        } else if (i <= 2 * numPlayers / 3) {
             stratLevel = "medium";
+        } else {
+            stratLevel = "complex";
         }
     }
 
@@ -127,29 +129,58 @@ public class Player {
         }
     }
 
-    public void stratComplex(int lowestCardInAllHands, int losingScore, int totalCards, int[] discardPile){
+    public void stratComplex(int lowestCardInAllHands, int losingScore, int totalCards, int[] discardPile, int[] otherHands){
         // Must draw if no cards
         if (hand.length == 0) {
             willDraw = true;
         } else if(points + lowestCardInAllHands >= losingScore) { // If folding would eliminate me, I should draw 
             willDraw = true;
         } else {
-            // Adjust threshold based on game state
-            double threshold;
-            
-            int pointsUntilLoss = losingScore - points;
-            
-            if (pointsUntilLoss <= 3) {
-                threshold = 0.15;  // Very conservative when close to losing
-            } else if (pointsUntilLoss <= 7) {
-                threshold = 0.25;  // Moderately conservative
+            int myLowest = getLowestCardInHand(); //player's lowest card
+            int myHighest = getHighestCardInHand(); //player's highest card
+            if (hand.length == 1 && myLowest == lowestCardInAllHands) {  // If I have the lowest card, nothing to lose by drawing
+                    willDraw = true;
+            } else if (myHighest - lowestCardInAllHands <= 3){ //ie my cards aren't that much different than the points I'd be getting by folding, might as well draw
+                willDraw = true;
             } else {
-                threshold = 0.35;  // Normal risk tolerance
-            }
-            for (int card : hand) { //card vale == # of that card in existence
-
+                double threshold; // Adjust threshold based on game state
+                int pointsUntilLoss = losingScore - points;
+                if (pointsUntilLoss <= (int) (losingScore * 0.75)) {
+                    threshold = 0.1;  // most conservative when close to losing
+                } else if (pointsUntilLoss <= (int) (losingScore * 0.66)) {
+                    threshold = 0.15;  // more conservative
+                } else {
+                    threshold = 0.2;  // standard risk tolerance
+                }
+                double totalRisk = 0;
+                for (int card : hand) { 
+                    totalRisk += calcPairRisk(card, totalCards, discardPile, otherHands);
+                }
+                if (totalRisk > threshold){
+                    willDraw = false;
+                } else {
+                    willDraw = true;                    
+                }
+                System.out.println("Calculated risk: " + totalRisk + " -->");
             }
         }
+    }
+
+    private double calcPairRisk(int riskyCard, int totalCardsInDeck, int[] discardPile, int[] otherHands){
+        int counter = 0;
+        for (int card : discardPile){
+            if (riskyCard == card){
+                counter++;
+            }
+        }
+        for (int card : otherHands){
+            if (riskyCard == card){
+                counter++;
+            }
+        }
+        //card value == # of that card in existence
+        double risk = (double) (riskyCard - counter) / totalCardsInDeck;
+        return risk;
     }
 
     // Accessor Methods
